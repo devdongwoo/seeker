@@ -1,5 +1,5 @@
 # Seeker (toy project)
-- 배포주소<br/>
+- 배포주소(vercel)<br/>
   https://seeker-flame.vercel.app/
   
 - 개발기간<br/>
@@ -46,6 +46,7 @@ redux-toolkit / redux-persist 를 사용하여 메인페이지로
 <img src="https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=next.js&logoColor=white">&nbsp;
 <img src="https://img.shields.io/badge/redux-764ABC?style=for-the-badge&logo=redux&logoColor=white">&nbsp;
 <img src="https://img.shields.io/badge/emotion-DB7093?style=for-the-badge&logo=styled-components&logoColor=white">&nbsp;
+<img src="https://img.shields.io/badge/vercel-000000?style=for-the-badge&logo=vercel&logoColor=white">&nbsp;
 <img src="https://img.shields.io/badge/axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white"><br/>
 
 # 화면구성(반응형)
