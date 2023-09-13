@@ -11,7 +11,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <title>롤 전적 검색</title>
-      <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+      <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"/>
       <meta name="description" content="Description" />
       <body>
         <Providers>
