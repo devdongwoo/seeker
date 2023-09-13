@@ -6,8 +6,7 @@ import { getMatcheData, getPuuidMatches } from "../../../../axios/asia"
 import { getTier } from "@/app/axios/riot"
 import { TIER_IMAGE } from "@/app/img"
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
-import { ListSkeleton } from "@/app/components/units/skeleton/List_skeleton"
-import { PageSkeleton } from "@/app/components/units/skeleton/Page_skeleton"
+import { Skeleton } from "@/app/components/units/skeleton/skeleton"
 import { setBookmark } from "@/app/redux/features/bookmark"
 
 interface Tier {
@@ -21,13 +20,11 @@ interface Tier {
 let start = 0
 const COUNT = 10
 
-function User() {
+export default function User() {
   const params = useParams()
   const [loading, setLoading] = useState(false)
-  const [profileLoading, setProfileLoading] = useState(false)
   const [tier, setTier] = useState<Tier[]>()
   const [list, setList] = useState<any>([])
-
   const user = useAppSelector((state) => state.persistedReducer.user)
 
   const dispatch = useAppDispatch()
@@ -69,7 +66,7 @@ function User() {
         leaguePoints: tier?.data[1]?.leaguePoints
       }
     ])
-    setProfileLoading(true)
+
     if (tier?.status === 200) {
       matcheData()
     }
@@ -87,139 +84,125 @@ function User() {
   return (
     <Wrap>
       <Container className="info-container">
-        {profileLoading ? (
-          <>
-            <Info className="info">
-              <div style={{ position: "relative" }}>
-                <Img
-                  width="120px"
-                  src={`http://ddragon.leagueoflegends.com/cdn/13.17.1/img/profileicon/${user.profileIconId}.png`}
-                />
-                <UserLevel>{`${user.summonerLevel}`}</UserLevel>
-              </div>
-              <UserData>
-                <UserName>{`${user.name}`}</UserName>
-                <PlayDate>League of Legend</PlayDate>
-              </UserData>
-            </Info>
-            <SoloRank className="info">
-              <TierPicture
-                width="120px"
-                height="120px"
-                src={
-                  TIER_IMAGE.filter((el) => {
-                    return tier && tier[0].tier
-                      ? el.name === (tier && tier[0].tier?.toLowerCase())
-                      : "unranked"
-                  })[0]?.src
-                }
-              />
-              <TierName>
-                <Box>
-                  <Rank_Name>솔로 랭크</Rank_Name>
-                  <Class>
-                    {tier && tier[0].tier}
-                    <Num>
-                      {(tier &&
-                        tier[0].tier?.toLocaleLowerCase().trim() ===
-                          "challenger") ||
-                      (tier &&
-                        tier[0].tier?.toLocaleLowerCase().trim() ===
-                          "grandmaster") ||
-                      (tier &&
-                        tier[0].tier?.toLocaleLowerCase().trim() === "master")
-                        ? ""
-                        : tier && tier[0].rank}
-                    </Num>
-                  </Class>
-                  <WinLose>
-                    <Win>
-                      {tier && tier[0].tier ? tier && tier[0].wins : 0} 승
-                    </Win>
-                    <Lose>
-                      {tier && tier[0].tier ? tier && tier[0].losses : 0} 패
-                    </Lose>
-                  </WinLose>
-                  <WinRate>
-                    {tier && tier[0].tier ? `승률: ` + " " : ""}
-                    {tier && tier[0].tier
-                      ? tier &&
-                        Math.round(
-                          (Number(tier[0].wins) /
-                            (Number(tier[0].wins) + Number(tier[0].losses))) *
-                            100
-                        ) + `%`
-                      : ""}
-                  </WinRate>
-                  <Lp>
-                    {tier && tier[0].tier ? tier[0].leaguePoints + "LP" : ""}
-                  </Lp>
-                </Box>
-              </TierName>
-            </SoloRank>
-            <MultiRank className="info">
-              <TierPicture
-                width="120px"
-                height="120px"
-                src={
-                  TIER_IMAGE.filter((el) => {
-                    return tier && tier[1].tier
-                      ? el.name === (tier && tier[1].tier?.toLowerCase())
-                      : "unranked"
-                  })[0]?.src
-                }
-              />
-              <TierName>
-                <Box>
-                  <Rank_Name>자유 랭크</Rank_Name>
-                  <Class>
-                    {tier && tier[1].tier}
-                    <Num>
-                      {(tier &&
-                        tier[1].tier?.toLocaleLowerCase().trim() ===
-                          "challenger") ||
-                      (tier &&
-                        tier[1].tier?.toLocaleLowerCase().trim() ===
-                          "grandmaster") ||
-                      (tier &&
-                        tier[1].tier?.toLocaleLowerCase().trim() === "master")
-                        ? ""
-                        : tier && tier[1].rank}
-                    </Num>
-                  </Class>
-                  <WinLose>
-                    <Win>
-                      {tier && tier[1].tier ? tier && tier[1].wins : 0} 승
-                    </Win>
-                    <Lose>
-                      {tier && tier[1].tier ? tier && tier[1].losses : 0} 패
-                    </Lose>
-                  </WinLose>
-                  <WinRate>
-                    {tier && tier[1].tier ? `승률: ` + " " : ""}
-                    {tier && tier[1].tier
-                      ? tier &&
-                        Math.round(
-                          (Number(tier[1].wins) /
-                            (Number(tier[1].wins) + Number(tier[1].losses))) *
-                            100
-                        ) + `%`
-                      : ""}
-                  </WinRate>
-                  <Lp>
-                    {tier && tier[1].tier ? tier[1].leaguePoints + "LP" : ""}
-                  </Lp>
-                </Box>
-              </TierName>
-            </MultiRank>
-          </>
-        ) : (
-          <PageSkeleton />
-        )}
+        <Info className="info">
+          <div style={{ position: "relative" }}>
+            <Img
+              width="120px"
+              src={`http://ddragon.leagueoflegends.com/cdn/13.17.1/img/profileicon/${user.profileIconId}.png`}
+            />
+            <UserLevel>{`${user.summonerLevel}`}</UserLevel>
+          </div>
+          <UserData>
+            <UserName>{`${user.name}`}</UserName>
+            <PlayDate>League of Legend</PlayDate>
+          </UserData>
+        </Info>
+        <SoloRank className="info">
+          <TierPicture
+            width="120px"
+            height="120px"
+            src={
+              TIER_IMAGE.filter((el) => {
+                return tier && tier[0].tier
+                  ? el.name === (tier && tier[0].tier?.toLowerCase())
+                  : "unranked"
+              })[0]?.src
+            }
+          />
+          <TierName>
+            <Box>
+              <Rank_Name>솔로 랭크</Rank_Name>
+              <Class>
+                {tier && tier[0].tier}
+                <Num>
+                  {(tier &&
+                    tier[0].tier?.toLocaleLowerCase().trim() ===
+                      "challenger") ||
+                  (tier &&
+                    tier[0].tier?.toLocaleLowerCase().trim() ===
+                      "grandmaster") ||
+                  (tier &&
+                    tier[0].tier?.toLocaleLowerCase().trim() === "master")
+                    ? ""
+                    : tier && tier[0].rank}
+                </Num>
+              </Class>
+              <WinLose>
+                <Win>{tier && tier[0].tier ? tier && tier[0].wins : 0} 승</Win>
+                <Lose>
+                  {tier && tier[0].tier ? tier && tier[0].losses : 0} 패
+                </Lose>
+              </WinLose>
+              <WinRate>
+                {tier && tier[0].tier ? `승률: ` + " " : ""}
+                {tier && tier[0].tier
+                  ? tier &&
+                    Math.round(
+                      (Number(tier[0].wins) /
+                        (Number(tier[0].wins) + Number(tier[0].losses))) *
+                        100
+                    ) + `%`
+                  : ""}
+              </WinRate>
+              <Lp>{tier && tier[0].tier ? tier[0].leaguePoints + "LP" : ""}</Lp>
+            </Box>
+          </TierName>
+        </SoloRank>
+        <MultiRank className="info">
+          <TierPicture
+            width="120px"
+            height="120px"
+            src={
+              TIER_IMAGE.filter((el) => {
+                return tier && tier[1].tier
+                  ? el.name === (tier && tier[1].tier?.toLowerCase())
+                  : "unranked"
+              })[0]?.src
+            }
+          />
+          <TierName>
+            <Box>
+              <Rank_Name>자유 랭크</Rank_Name>
+              <Class>
+                {tier && tier[1].tier}
+                <Num>
+                  {(tier &&
+                    tier[1].tier?.toLocaleLowerCase().trim() ===
+                      "challenger") ||
+                  (tier &&
+                    tier[1].tier?.toLocaleLowerCase().trim() ===
+                      "grandmaster") ||
+                  (tier &&
+                    tier[1].tier?.toLocaleLowerCase().trim() === "master")
+                    ? ""
+                    : tier && tier[1].rank}
+                </Num>
+              </Class>
+              <WinLose>
+                <Win>{tier && tier[1].tier ? tier && tier[1].wins : 0} 승</Win>
+                <Lose>
+                  {tier && tier[1].tier ? tier && tier[1].losses : 0} 패
+                </Lose>
+              </WinLose>
+              <WinRate>
+                {tier && tier[1].tier ? `승률: ` + " " : ""}
+                {tier && tier[1].tier
+                  ? tier &&
+                    Math.round(
+                      (Number(tier[1].wins) /
+                        (Number(tier[1].wins) + Number(tier[1].losses))) *
+                        100
+                    ) + `%`
+                  : ""}
+              </WinRate>
+              <Lp>{tier && tier[1].tier ? tier[1].leaguePoints + "LP" : ""}</Lp>
+            </Box>
+          </TierName>
+        </MultiRank>
       </Container>
-      {loading ? (
-        <Bottom>
-          <ListContainer>
+      <Bottom>
+        <ListContainer>
+          {loading ? (
             <ListBox style={{ listStyle: "none" }}>
               {list.map((pel: any) => {
                 return (
@@ -275,7 +258,7 @@ function User() {
                   </List>
                 )
               })}
-              <List>
+              <li>
                 <MoreBtn
                   onClick={() => {
                     start += 10
@@ -284,18 +267,16 @@ function User() {
                 >
                   더 보기
                 </MoreBtn>
-              </List>
+              </li>
             </ListBox>
-          </ListContainer>
-        </Bottom>
-      ) : (
-        <ListSkeleton />
-      )}
+          ) : (
+            <Skeleton />
+          )}
+        </ListContainer>
+      </Bottom>
     </Wrap>
   )
 }
-
-export default React.memo(User)
 
 const Wrap = styled.div`
   font-family: "AppleSDGothic";
@@ -317,7 +298,6 @@ const Info = styled.div`
   border-radius: 4px;
   padding: 20px;
   width: 500px;
-  height: 172px;
 `
 
 const Bottom = styled.div``
