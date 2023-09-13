@@ -1,5 +1,7 @@
 # Seeker (toy project)
-
+- 배포주소<br/>
+  https://seeker-flame.vercel.app/
+  
 - 개발기간<br/>
   2023.09.10 ~ 2023.09.12
 
