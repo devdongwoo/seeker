@@ -1,7 +1,7 @@
 "use client"
 import styled from "@emotion/styled"
 
-export function Skeleton() {
+export function ListSkeleton() {
   const skeleton_arr = Array.from({ length: 10 }, () => 0)
 
   const uuidv4 = () => {
@@ -23,6 +23,9 @@ export function Skeleton() {
           </List>
         )
       })}
+      <List className="skeleton-list">
+        <Content className="skeleton-content btn"></Content>
+      </List>
     </ListBox>
   )
 }
