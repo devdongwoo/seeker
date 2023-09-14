@@ -1,5 +1,5 @@
 "use client"
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useLayoutEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import styled from "@emotion/styled"
 import { getMatcheData, getPuuidMatches } from "../../../../axios/asia"
@@ -8,6 +8,7 @@ import { TIER_IMAGE } from "@/app/img"
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
 import { Skeleton } from "@/app/components/units/skeleton/skeleton"
 import { setBookmark } from "@/app/redux/features/bookmark"
+import { Spinner } from "@/app/components/units/spinner/spinner"
 
 interface Tier {
   tier?: string
@@ -22,6 +23,7 @@ const COUNT = 10
 
 export default function User() {
   const params = useParams()
+  const [show, setShow] = useState(false)
   const [loading, setLoading] = useState(false)
   const [tier, setTier] = useState<Tier[]>()
   const [list, setList] = useState<any>([])
@@ -34,19 +36,19 @@ export default function User() {
     return date.toLocaleString()
   }
 
-  const matcheData = useCallback(async () => {
-    let matchList = []
+  const matcheData = async () => {
+    let matchList: any = []
 
     const matches = await getPuuidMatches(String(params.puuid), start, COUNT)
 
-    setLoading(false)
     for (let i = 0; i < matches?.data.length; i++) {
       matchList.push(await getMatcheData(matches?.data[i]))
     }
-    setLoading(true)
 
+    setShow(false)
+    setLoading(true)
     setList([...list, ...matchList])
-  }, [list])
+  }
 
   const tierData = async () => {
     const tier = await getTier(String(params.userId))
@@ -74,8 +76,8 @@ export default function User() {
 
   useEffect(() => {
     tierData()
-
     dispatch(setBookmark({ ...user }))
+
     return () => {
       start = 0
     }
@@ -88,7 +90,7 @@ export default function User() {
           <div style={{ position: "relative" }}>
             <Img
               width="120px"
-              src={`http://ddragon.leagueoflegends.com/cdn/13.17.1/img/profileicon/${user.profileIconId}.png`}
+              src={`http://ddragon.leagueoflegends.com/cdn/13.18.1/img/profileicon/${user.profileIconId}.png`}
             />
             <UserLevel>{`${user.summonerLevel}`}</UserLevel>
           </div>
@@ -239,7 +241,7 @@ export default function User() {
                               </div>
                               <ChampionImg
                                 width="70px"
-                                src={`https://ddragon.leagueoflegends.com/cdn/13.17.1/img/champion/${el.championName}.png`}
+                                src={`https://ddragon.leagueoflegends.com/cdn/13.18.1/img/champion/${el.championName}.png`}
                               />
                               <Grade>
                                 <MyPoint>
@@ -258,16 +260,23 @@ export default function User() {
                   </List>
                 )
               })}
-              <li>
-                <MoreBtn
-                  onClick={() => {
-                    start += 10
-                    matcheData()
-                  }}
-                >
-                  더 보기
-                </MoreBtn>
-              </li>
+              {show ? (
+                <List>
+                  <Spinner />
+                </List>
+              ) : (
+                <List>
+                  <MoreBtn
+                    onClick={() => {
+                      start += 10
+                      setShow(true)
+                      matcheData()
+                    }}
+                  >
+                    더 보기
+                  </MoreBtn>
+                </List>
+              )}
             </ListBox>
           ) : (
             <Skeleton />
@@ -415,7 +424,6 @@ const ListBox = styled.ul`
 const MoreBtn = styled.button`
   border-width: 1px;
   border-style: solid;
-  border-image: initial;
   border-color: #dbe0e4;
   background-color: #fff;
   border-radius: 4px;
@@ -425,7 +433,6 @@ const MoreBtn = styled.button`
   color: #202d37;
   font-size: 13px;
   text-align: center;
-  text-decoration: none;
   cursor: pointer;
 `
 

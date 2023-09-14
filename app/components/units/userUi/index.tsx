@@ -46,7 +46,7 @@ export default function Userui() {
             >
               <Img
                 width="128px"
-                src={`http://ddragon.leagueoflegends.com/cdn/13.17.1/img/profileicon/${el.profileIconId}.png`}
+                src={`http://ddragon.leagueoflegends.com/cdn/13.18.1/img/profileicon/${el.profileIconId}.png`}
                 alt="유저 프로필 이미지"
               />
               <UserInfo>
